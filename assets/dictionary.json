@@ -26,112 +26,110 @@
     }
   ],
   "letters": [
-    [
-      {
-        "expression": ["a", "A"],
-        "otto": "ei"
-      },
-      {
-        "expression": ["b", "B"],
-        "otto": "bi"
-      },
-      {
-        "expression": ["c", "C"],
-        "otto": "xi"
-      },
-      {
-        "expression": ["d", "D"],
-        "otto": "di"
-      },
-      {
-        "expression": ["e", "E", "1"],
-        "otto": "yi"
-      },
-      {
-        "expression": ["f", "F"],
-        "otto": "ai fu"
-      },
-      {
-        "expression": ["g", "G"],
-        "otto": "ji"
-      },
-      {
-        "expression": ["h", "H"],
-        "otto": "ai chi"
-      },
-      {
-        "expression": ["i", "I"],
-        "otto": "ai"
-      },
-      {
-        "expression": ["j", "J"],
-        "otto": "zhei"
-      },
-      {
-        "expression": ["k", "K"],
-        "otto": "kei"
-      },
-      {
-        "expression": ["l", "L"],
-        "otto": "ai lu"
-      },
-      {
-        "expression": ["m", "M"],
-        "otto": "ai mu"
-      },
-      {
-        "expression": ["n", "N"],
-        "otto": "en"
-      },
-      {
-        "expression": ["o", "O"],
-        "otto": "ou"
-      },
-      {
-        "expression": ["p", "P"],
-        "otto": "pi"
-      },
-      {
-        "expression": ["q", "Q"],
-        "otto": "kiu"
-      },
-      {
-        "expression": ["r", "R"],
-        "otto": "a"
-      },
-      {
-        "expression": ["s", "S"],
-        "otto": "ai si"
-      },
-      {
-        "expression": ["t", "T"],
-        "otto": "ti"
-      },
-      {
-        "expression": ["u", "U"],
-        "otto": "you"
-      },
-      {
-        "expression": ["v", "V"],
-        "otto": "wei"
-      },
-      {
-        "expression": ["w", "W"],
-        "otto": "da bu liu"
-      },
-      {
-        "expression": ["x", "X"],
-        "otto": "ai ke si"
-      },
-      {
-        "expression": ["y", "Y"],
-        "otto": "wai"
-      },
-      {
-        "expression": ["z", "Z"],
-        "otto": "zei"
-      }
-    ]
+    {
+      "expression": ["a", "A"],
+      "otto": "ei"
+    },
+    {
+      "expression": ["b", "B"],
+      "otto": "bi"
+    },
+    {
+      "expression": ["c", "C"],
+      "otto": "xi"
+    },
+    {
+      "expression": ["d", "D"],
+      "otto": "di"
+    },
+    {
+      "expression": ["e", "E", "1"],
+      "otto": "yi"
+    },
+    {
+      "expression": ["f", "F"],
+      "otto": "ai fu"
+    },
+    {
+      "expression": ["g", "G"],
+      "otto": "ji"
+    },
+    {
+      "expression": ["h", "H"],
+      "otto": "ai chi"
+    },
+    {
+      "expression": ["i", "I"],
+      "otto": "ai"
+    },
+    {
+      "expression": ["j", "J"],
+      "otto": "zhei"
+    },
+    {
+      "expression": ["k", "K"],
+      "otto": "kei"
+    },
+    {
+      "expression": ["l", "L"],
+      "otto": "ai lu"
+    },
+    {
+      "expression": ["m", "M"],
+      "otto": "ai mu"
+    },
+    {
+      "expression": ["n", "N"],
+      "otto": "en"
+    },
+    {
+      "expression": ["o", "O"],
+      "otto": "ou"
+    },
+    {
+      "expression": ["p", "P"],
+      "otto": "pi"
+    },
+    {
+      "expression": ["q", "Q"],
+      "otto": "kiu"
+    },
+    {
+      "expression": ["r", "R"],
+      "otto": "a"
+    },
+    {
+      "expression": ["s", "S"],
+      "otto": "ai si"
+    },
+    {
+      "expression": ["t", "T"],
+      "otto": "ti"
+    },
+    {
+      "expression": ["u", "U"],
+      "otto": "you"
+    },
+    {
+      "expression": ["v", "V"],
+      "otto": "wei"
+    },
+    {
+      "expression": ["w", "W"],
+      "otto": "da bu liu"
+    },
+    {
+      "expression": ["x", "X"],
+      "otto": "ai ke si"
+    },
+    {
+      "expression": ["y", "Y"],
+      "otto": "wai"
+    },
+    {
+      "expression": ["z", "Z"],
+      "otto": "zei"
+    }
   ],
   "numbers": [
     {

@@ -2,11 +2,12 @@ package ottoTTS
 
 import (
 	"encoding/json"
+	"github.com/gujial/ottoTTS/wavHandler"
 	"github.com/mozillazg/go-pinyin"
 	"log"
 	"os"
-	"ottoTTS/wavHandler"
 	"strings"
+	"unicode"
 )
 
 type expression struct {
@@ -40,8 +41,10 @@ func getDictionary() (dictionary, error) {
 func expressionMatch(str string) (string, int) {
 	for _, exprs := range dict.Expressions {
 		for _, expr := range exprs.Expression {
-			if strings.Contains(str, expr) {
-				return exprs.Otto, len(expr)
+			if strings.HasPrefix(str, expr) {
+				// 修正：计算 expr 的 rune 长度，而不是字节长度
+				exprRuneLen := len([]rune(expr))
+				return exprs.Otto, exprRuneLen
 			}
 		}
 	}
@@ -51,27 +54,50 @@ func expressionMatch(str string) (string, int) {
 func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 	var slices []wavHandler.Slice
 	index := 0
-	for index < len(words) {
+	wordRunes := []rune(words) // 使用 rune 处理 UTF-8 字符
+
+	for index < len(wordRunes) {
+		char := wordRunes[index]
+
+		// 处理表达式匹配
 		if expressionOverride {
-			matchedWords, length := expressionMatch(words[index:])
+			log.Println("判断", string(wordRunes[index:])) // 日志输出剩余字符串
+			matchedWords, length := expressionMatch(string(wordRunes[index:]))
+			log.Println("匹配长度", length)
+
 			if length != 0 {
-				slice := wavHandler.Slice{Category: "expressions", Content: matchedWords}
-				slices = append(slices, slice)
-				index += length
+				slices = append(slices, wavHandler.Slice{Category: "expressions", Content: matchedWords})
+				index += length // 这里 length 是字符数，不是字节数
 				continue
 			}
 		}
-		a := pinyin.NewArgs()
-		c := pinyin.Pinyin(string(words[index]), a)
-		slice := wavHandler.Slice{Category: "characters", Content: c[0][0]}
-		slices = append(slices, slice)
-		index++
+
+		// 处理中文字符
+		if unicode.Is(unicode.Han, char) {
+			a := pinyin.NewArgs()
+			c := pinyin.Pinyin(string(char), a)
+			slices = append(slices, wavHandler.Slice{Category: "characters", Content: c[0][0]})
+
+			// 处理英文字母（单个）
+		} else if unicode.IsLetter(char) {
+			slices = append(slices, wavHandler.Slice{Category: "letters", Content: string(char)})
+
+			// 处理数字（单个）
+		} else if unicode.IsDigit(char) {
+			slices = append(slices, wavHandler.Slice{Category: "numbers", Content: string(char)})
+
+			// 处理标点、空格、符号等
+		} else {
+			slices = append(slices, wavHandler.Slice{Category: "others", Content: string(char)})
+		}
+
+		index++ // 这里 index 递增的是字符，不是字节
 	}
 
 	return slices
 }
 
-func speech(s string, expressionOverride bool) ([]byte, error) {
+func Speech(s string, expressionOverride bool) ([]byte, error) {
 	return wavHandler.GetSpeech(stringToSlices(s, expressionOverride))
 }
 
