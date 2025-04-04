@@ -1,3 +1,2 @@
-[tts]
-expression_override = false
-debug = false
+expression_override = true
+Debug = false

@@ -2,6 +2,7 @@ package ottoTTS
 
 import (
 	"encoding/json"
+	"github.com/BurntSushi/toml"
 	"github.com/gujial/ottoTTS/wavHandler"
 	"github.com/mozillazg/go-pinyin"
 	"log"
@@ -21,7 +22,13 @@ type dictionary struct {
 	Numbers     []expression `json:"numbers"`
 }
 
+type config struct {
+	ExpressionOverride bool `toml:"expression_override"`
+	Debug              bool `toml:"Debug"`
+}
+
 var dict dictionary
+var cfg config
 
 func getDictionary() (dictionary, error) {
 	dictFile, err := os.ReadFile("./assets/dictionary.json")
@@ -95,9 +102,11 @@ func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 
 		// 处理表达式匹配
 		if expressionOverride {
-			log.Println("判断", string(wordRunes[index:])) // 日志输出剩余字符串
 			matchedWords, length := expressionMatch(string(wordRunes[index:]))
-			log.Println("匹配长度", length)
+			if cfg.Debug {
+				log.Println("判断", string(wordRunes[index:])) // 日志输出剩余字符串
+				log.Println("匹配长度", length)
+			}
 
 			if length != 0 {
 				slices = append(slices, buildSlices(matchedWords, "expressions")...)
@@ -131,12 +140,31 @@ func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 	return slices
 }
 
-func Speech(s string, expressionOverride bool) ([]byte, error) {
-	return wavHandler.GetSpeech(stringToSlices(s, expressionOverride))
+func Speech(s string) ([]byte, error) {
+	return wavHandler.GetSpeech(stringToSlices(s, cfg.ExpressionOverride))
+}
+
+func loadConfig() {
+	_, err := toml.DecodeFile("./config.toml", &cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	if cfg.Debug {
+		log.Println("调试模式已开启")
+	}
+
+	if cfg.ExpressionOverride {
+		log.Println("启用otto短语覆盖")
+	}
 }
 
 func InitializeTTS() {
 	log.Println("初始化otto文字转语音引擎")
+
+	log.Println("加载配置文件")
+	loadConfig()
+	log.Println("配置文件加载完成")
 
 	log.Println("加载otto词典")
 	var err error
