@@ -22,3 +22,13 @@ make full-build
 我是电棍，你好你好
 ```
 转换后的 wav 文件存放在当前工作目录中的`otto.wav`文件中
+
+## 作为 go package 引入
+```shell
+go get github.com/gujial/ottoTTS@latest
+```
+
+## 安装 cli 工具
+```shell
+go install github.com/gujial/ottoTTS/cli/ottoTTScli@latest
+```
