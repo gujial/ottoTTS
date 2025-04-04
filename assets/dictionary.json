@@ -43,7 +43,7 @@
       "otto": "di"
     },
     {
-      "expression": ["e", "E", "1"],
+      "expression": ["e", "E"],
       "otto": "yi"
     },
     {
@@ -135,6 +135,10 @@
     {
       "expression": ["0"],
       "otto": "ling"
+    },
+    {
+      "expression": ["1"],
+      "otto": "yi"
     },
     {
       "expression": ["2"],

@@ -16,6 +16,10 @@ func GetSpeech(slices []Slice) ([]byte, error) {
 	for _, slice := range slices {
 		var filePath string
 
+		if len(slice.Content) == 0 {
+			continue
+		}
+
 		switch slice.Category {
 		case "expressions":
 			filePath = "./assets/sounds/multiple/" + slice.Content + ".wav"

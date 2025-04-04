@@ -51,6 +51,28 @@ func expressionMatch(str string) (string, int) {
 	return "", 0
 }
 
+func lettersMatch(l string) string {
+	for _, letters := range dict.Letters {
+		for _, letter := range letters.Expression {
+			if strings.HasPrefix(letter, l) {
+				return letters.Otto
+			}
+		}
+	}
+	return ""
+}
+
+func numbersMatch(n string) string {
+	for _, numbers := range dict.Numbers {
+		for _, number := range numbers.Expression {
+			if strings.HasPrefix(n, number) {
+				return numbers.Otto
+			}
+		}
+	}
+	return ""
+}
+
 func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 	var slices []wavHandler.Slice
 	index := 0
@@ -80,12 +102,11 @@ func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 
 			// 处理英文字母（单个）
 		} else if unicode.IsLetter(char) {
-			slices = append(slices, wavHandler.Slice{Category: "letters", Content: string(char)})
+			slices = append(slices, wavHandler.Slice{Category: "letters", Content: lettersMatch(string(char))})
 
 			// 处理数字（单个）
 		} else if unicode.IsDigit(char) {
-			slices = append(slices, wavHandler.Slice{Category: "numbers", Content: string(char)})
-
+			slices = append(slices, wavHandler.Slice{Category: "numbers", Content: numbersMatch(string(char))})
 			// 处理标点、空格、符号等
 		} else {
 			slices = append(slices, wavHandler.Slice{Category: "others", Content: string(char)})
