@@ -13,19 +13,24 @@ type WAV struct {
 	Data          []byte
 }
 
-// ReadWAV 从字节数组读取 WAV 数据
 func ReadWAV(data []byte) (*WAV, error) {
 	if len(data) < 44 {
 		return nil, errors.New("invalid WAV data")
 	}
 
-	head := data[:44]
-	numChannels := binary.LittleEndian.Uint16(head[22:24])
-	sampleRate := binary.LittleEndian.Uint32(head[24:28])
-	bitsPerSample := binary.LittleEndian.Uint16(head[34:36])
-	dataSize := binary.LittleEndian.Uint32(head[40:44])
+	numChannels := binary.LittleEndian.Uint16(data[22:24])
+	sampleRate := binary.LittleEndian.Uint32(data[24:28])
+	bitsPerSample := binary.LittleEndian.Uint16(data[34:36])
 
-	if uint32(len(data)-44) < dataSize {
+	// 查找 "data" 子块
+	dataStart := bytes.Index(data, []byte("data"))
+	if dataStart == -1 || dataStart+8 >= len(data) {
+		return nil, errors.New("invalid data chunk")
+	}
+
+	// 获取 dataSize 并确保数据长度正确
+	dataSize := binary.LittleEndian.Uint32(data[dataStart+4 : dataStart+8])
+	if uint32(len(data)-(dataStart+8)) < dataSize {
 		return nil, errors.New("invalid WAV data size")
 	}
 
@@ -33,11 +38,10 @@ func ReadWAV(data []byte) (*WAV, error) {
 		NumChannels:   numChannels,
 		SampleRate:    sampleRate,
 		BitsPerSample: bitsPerSample,
-		Data:          data[44:],
+		Data:          data[dataStart+8 : dataStart+8+int(dataSize)], // 正确偏移
 	}, nil
 }
 
-// WriteWAV 将 WAV 数据转换为字节数组
 func WriteWAV(wav *WAV) ([]byte, error) {
 	buffer := new(bytes.Buffer)
 
