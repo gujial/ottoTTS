@@ -67,7 +67,7 @@ func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 
 			if length != 0 {
 				slices = append(slices, wavHandler.Slice{Category: "expressions", Content: matchedWords})
-				index += length // 这里 length 是字符数，不是字节数
+				index += length
 				continue
 			}
 		}

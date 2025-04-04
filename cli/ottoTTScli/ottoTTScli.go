@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/gujial/ottoTTS"
+	"log"
 	"os"
 )
 
@@ -16,7 +17,7 @@ func main() {
 	str := os.Args[1]
 	b, err := ottoTTS.Speech(str, true)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
 
 	fmt.Println("写入文件中")
@@ -24,7 +25,12 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(file)
 
 	count, err := file.Write(b)
 	if err != nil {
