@@ -73,6 +73,18 @@ func numbersMatch(n string) string {
 	return ""
 }
 
+func buildSlices(otto string, category string) []wavHandler.Slice {
+	text := strings.Fields(otto)
+	var slices []wavHandler.Slice
+	for _, word := range text {
+		slices = append(slices, wavHandler.Slice{
+			Category: category,
+			Content:  word,
+		})
+	}
+	return slices
+}
+
 func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 	var slices []wavHandler.Slice
 	index := 0
@@ -88,7 +100,7 @@ func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 			log.Println("匹配长度", length)
 
 			if length != 0 {
-				slices = append(slices, wavHandler.Slice{Category: "expressions", Content: matchedWords})
+				slices = append(slices, buildSlices(matchedWords, "expressions")...)
 				index += length
 				continue
 			}
@@ -102,11 +114,12 @@ func stringToSlices(words string, expressionOverride bool) []wavHandler.Slice {
 
 			// 处理英文字母（单个）
 		} else if unicode.IsLetter(char) {
-			slices = append(slices, wavHandler.Slice{Category: "letters", Content: lettersMatch(string(char))})
+			slices = append(slices, buildSlices(lettersMatch(string(char)), "letters")...)
 
 			// 处理数字（单个）
 		} else if unicode.IsDigit(char) {
-			slices = append(slices, wavHandler.Slice{Category: "numbers", Content: numbersMatch(string(char))})
+			slices = append(slices, buildSlices(numbersMatch(string(char)), "numbers")...)
+
 			// 处理标点、空格、符号等
 		} else {
 			slices = append(slices, wavHandler.Slice{Category: "others", Content: string(char)})

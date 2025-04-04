@@ -10,37 +10,45 @@ type Slice struct {
 	Content  string
 }
 
+func sliceToWav(slice Slice) (*wav.WAV, error) {
+	var filePath string
+	switch slice.Category {
+	case "others":
+		return nil, nil
+
+	default:
+		filePath = "./assets/sounds/" + slice.Content + ".wav"
+	}
+
+	matchFile, err := os.ReadFile(filePath)
+	if err != nil {
+		return nil, err
+	}
+
+	matchWav, err := wav.ReadWAV(matchFile)
+	if err != nil {
+		return nil, err
+	}
+
+	return matchWav, nil
+}
+
 // GetSpeech 生成合成的 WAV 音频
 func GetSpeech(slices []Slice) ([]byte, error) {
 	var matchWavs []*wav.WAV
 	for _, slice := range slices {
-		var filePath string
-
 		if len(slice.Content) == 0 {
 			continue
 		}
 
-		switch slice.Category {
-		case "expressions":
-			filePath = "./assets/sounds/multiple/" + slice.Content + ".wav"
-		case "others":
-			continue
-
-		default:
-			filePath = "./assets/sounds/single/" + slice.Content + ".wav"
-		}
-
-		matchFile, err := os.ReadFile(filePath)
+		matchWav, err := sliceToWav(slice)
 		if err != nil {
 			return nil, err
 		}
 
-		matchWav, err := wav.ReadWAV(matchFile)
-		if err != nil {
-			return nil, err
+		if matchWav != nil {
+			matchWavs = append(matchWavs, matchWav)
 		}
-
-		matchWavs = append(matchWavs, matchWav)
 	}
 
 	ConcatenatedWav, err := wav.ConcatenateWAVs(matchWavs)

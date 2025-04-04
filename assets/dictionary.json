@@ -23,6 +23,10 @@
     {
       "expression": ["波比是我爹", "啊嘛波比是我爹", "啊波比是我爹"],
       "otto": "bobi"
+    },
+    {
+      "expression": ["otto"],
+      "otto": "ou tou"
     }
   ],
   "letters": [
