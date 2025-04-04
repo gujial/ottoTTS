@@ -35,7 +35,7 @@ clean:
 full-build: build copy-assets copy-config
 
 # 运行 Go 程序
-run: $(BUILD_DIR)/$(BINARY_NAME)
+run: clean full-build
 	@echo "Running the application..."
 	$(BUILD_DIR)/$(CLI_BINARY_NAME)
 

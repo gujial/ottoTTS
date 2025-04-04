@@ -7,14 +7,8 @@ import (
 	"os"
 )
 
-func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("Usage: ottoTTScli <str>")
-		return
-	}
-
+func saveWav(str string) {
 	ottoTTS.InitializeTTS()
-	str := os.Args[1]
 	b, err := ottoTTS.Speech(str)
 	if err != nil {
 		log.Fatal(err)
@@ -37,4 +31,20 @@ func main() {
 		panic(err)
 	}
 	log.Println("共写入", count, "bytes")
+}
+
+func main() {
+	var str string
+
+	if len(os.Args) < 2 {
+		fmt.Println("输入需要转换的字符串")
+		_, err := fmt.Scanf("%s", &str)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		str = os.Args[1]
+	}
+
+	saveWav(str)
 }
