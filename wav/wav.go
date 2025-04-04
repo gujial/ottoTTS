@@ -68,6 +68,26 @@ func WriteWAV(wav *WAV) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
+// SilentWAV 生成一段指定持续时间的静音 WAV 音频
+func SilentWAV(numChannels uint16, sampleRate uint32, bitsPerSample uint16, durationSeconds float64) (*WAV, error) {
+	if bitsPerSample%8 != 0 {
+		return nil, errors.New("bitsPerSample must be a multiple of 8")
+	}
+
+	bytesPerSample := bitsPerSample / 8
+	numSamples := uint32(float64(sampleRate) * durationSeconds)
+	totalBytes := int(numSamples) * int(numChannels) * int(bytesPerSample)
+
+	silence := make([]byte, totalBytes) // 默认为 0，表示静音
+
+	return &WAV{
+		NumChannels:   numChannels,
+		SampleRate:    sampleRate,
+		BitsPerSample: bitsPerSample,
+		Data:          silence,
+	}, nil
+}
+
 // ConcatenateWAVs 连接多个 WAV 文件
 func ConcatenateWAVs(wavs []*WAV) (*WAV, error) {
 	if len(wavs) == 0 {

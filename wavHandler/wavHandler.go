@@ -48,6 +48,17 @@ func GetSpeech(slices []Slice) ([]byte, error) {
 
 		if matchWav != nil {
 			matchWavs = append(matchWavs, matchWav)
+		} else {
+			silentWav, err := wav.SilentWAV(
+				matchWavs[0].NumChannels,
+				matchWavs[0].SampleRate,
+				matchWavs[0].BitsPerSample,
+				0.5,
+			)
+			if err != nil {
+				return nil, err
+			}
+			matchWavs = append(matchWavs, silentWav)
 		}
 	}
 
