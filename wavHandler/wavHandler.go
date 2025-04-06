@@ -53,7 +53,7 @@ func GetSpeech(slices []Slice) ([]byte, error) {
 				matchWavs[0].NumChannels,
 				matchWavs[0].SampleRate,
 				matchWavs[0].BitsPerSample,
-				0.5,
+				0.2,
 			)
 			if err != nil {
 				return nil, err
