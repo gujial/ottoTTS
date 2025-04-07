@@ -10,27 +10,49 @@ type Slice struct {
 	Content  string
 }
 
+func generateApproxNames(content string) []string {
+	var result []string
+
+	// 简单规则：逐步去掉最后一个字符（退化为前缀匹配）
+	for i := len(content) - 1; i > 0; i-- {
+		result = append(result, content[:i])
+	}
+
+	return result
+}
+
 func sliceToWav(slice Slice) (*wav.WAV, error) {
-	var filePath string
-	switch slice.Category {
-	case "others":
+	if slice.Category == "others" {
 		return nil, nil
-
-	default:
-		filePath = "./assets/sounds/" + slice.Content + ".wav"
 	}
 
-	matchFile, err := os.ReadFile(filePath)
+	basePath := "./assets/sounds/"
+	filename := slice.Content + ".wav"
+	filePath := basePath + filename
+
+	// 先尝试直接读取
+	if data, err := tryReadWav(filePath); err == nil {
+		return data, nil
+	}
+
+	// 近似匹配尝试
+	approxNames := generateApproxNames(slice.Content)
+	for _, alt := range approxNames {
+		altPath := basePath + alt + ".wav"
+		if data, err := tryReadWav(altPath); err == nil {
+			return data, nil
+		}
+	}
+
+	return nil, nil // 如果还是没有匹配，返回 nil 用静音
+}
+
+func tryReadWav(filePath string) (*wav.WAV, error) {
+	bytes, err := os.ReadFile(filePath)
 	if err != nil {
 		return nil, err
 	}
-
-	matchWav, err := wav.ReadWAV(matchFile)
-	if err != nil {
-		return nil, err
-	}
-
-	return matchWav, nil
+	return wav.ReadWAV(bytes)
 }
 
 // GetSpeech 生成合成的 WAV 音频
